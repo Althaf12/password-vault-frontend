@@ -17,7 +17,7 @@ function AddPasswordForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, this would save to backend/state
+    // Note: In production, this would securely save to backend API
     console.log('Saving password:', formData);
     alert(`Password for ${formData.service} saved successfully!`);
     setFormData({ service: '', username: '', password: '' });

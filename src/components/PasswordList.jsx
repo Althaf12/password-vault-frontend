@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './PasswordList.css';
 
 function PasswordList() {
+  // Demo data - In production, passwords would be fetched securely from backend
   const [passwords, setPasswords] = useState([
     { id: 1, service: 'Email', username: 'user@example.com', password: '••••••••' },
     { id: 2, service: 'Social Media', username: 'john_doe', password: '••••••••' },
@@ -48,7 +49,7 @@ function PasswordList() {
                 <div className="info-row">
                   <span className="label">Password:</span>
                   <span className="value">
-                    {showPassword[item.id] ? 'SecurePass123!' : item.password}
+                    {showPassword[item.id] ? 'Demo-Pass123!' : item.password}
                   </span>
                   <button 
                     className="toggle-btn"
