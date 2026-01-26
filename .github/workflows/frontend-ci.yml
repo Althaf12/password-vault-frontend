@@ -1,0 +1,34 @@
+name: Password Vault Frontend Deploy on RP5 (Self-hosted)
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Update frontend code
+        run: |
+          sudo -u passwordvault git -C /opt/password-vault-frontend fetch origin
+          sudo -u passwordvault git -C /opt/password-vault-frontend reset --hard origin/main
+          sudo -u passwordvault git -C /opt/password-vault-frontend clean -fd
+
+      - name: Install dependencies
+        run: |
+          cd /opt/password-vault-frontend
+          sudo -u passwordvault npm install
+
+      - name: Build frontend
+        run: |
+          cd /opt/password-vault-frontend
+          sudo -u passwordvault npm run build
+
+      - name: Reload nginx
+        run: |
+          sudo nginx -t
+          sudo systemctl restart nginx
+
+      - name: Done
+        run: echo "Password Vault Frontend deployed successfully."
