@@ -11,6 +11,7 @@ function Home() {
       <main className="main-content">
         <div className="content-wrapper">
           <h1 className="page-title">Welcome to Your Password Vault</h1>
+          <h2 className="page-title">(This is a sample site. Original is under development)</h2>
           <p className="page-subtitle">Securely manage all your passwords in one place</p>
           <PasswordList />
           <AddPasswordForm />
