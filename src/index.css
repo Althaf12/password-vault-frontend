@@ -1,67 +1,123 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+/* ══════════════════════════════════════════════════════════════
+   Password Vault — Global Styles & Design Tokens
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Dark theme (default) ── */
+:root,
+[data-theme='dark'] {
+  --bg:              #0f1117;
+  --surface:         #161822;
+  --card:            #1c1f2e;
+  --border:          #2a2d3e;
+  --hover:           rgba(255, 255, 255, 0.06);
+
+  --text-primary:    #e4e6f0;
+  --text-secondary:  #9ea2b8;
+  --text-tertiary:   #6b6f85;
+
+  --accent:          #6366f1;
+  --accent-hover:    #4f46e5;
+  --accent-muted:    rgba(99, 102, 241, 0.15);
+
+  --danger:          #ef4444;
+  --danger-muted:    rgba(239, 68, 68, 0.12);
+
+  --success:         #22c55e;
+  --success-muted:   rgba(34, 197, 94, 0.12);
+
+  color-scheme: dark;
+}
+
+/* ── Light theme ── */
+[data-theme='light'] {
+  --bg:              #f5f6fa;
+  --surface:         #ffffff;
+  --card:            #ffffff;
+  --border:          #e2e4ec;
+  --hover:           rgba(0, 0, 0, 0.04);
+
+  --text-primary:    #1a1c2b;
+  --text-secondary:  #5d6076;
+  --text-tertiary:   #9295a8;
+
+  --accent:          #6366f1;
+  --accent-hover:    #4f46e5;
+  --accent-muted:    rgba(99, 102, 241, 0.1);
+
+  --danger:          #dc2626;
+  --danger-muted:    rgba(220, 38, 38, 0.08);
+
+  --success:         #16a34a;
+  --success-muted:   rgba(22, 163, 74, 0.08);
+
+  color-scheme: light;
+}
+
+/* ── Base ── */
+html {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
-  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
   min-width: 320px;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#root {
+  width: 100%;
 }
 
+/* ── Links ── */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* ── Buttons reset ── */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* ── Scrollbar (dark) ── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--accent-muted);
+  color: var(--text-primary);
+}
