@@ -2,10 +2,14 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--surface);
+  background: rgba(11, 15, 31, 0.85);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+[data-theme='light'] .header {
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .inner {
@@ -164,6 +168,27 @@
   border-color: var(--danger);
 }
 
+/* Lock vault button */
+.lockBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: var(--accent-muted);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.lockBtn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
 /* ── Responsive ── */
 @media (max-width: 600px) {
   .inner {
@@ -177,5 +202,9 @@
 
   .nav {
     margin-left: 0;
+  }
+
+  .lockBtn span:last-child {
+    display: none;
   }
 }

@@ -1,26 +1,58 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react'
+import { useVault } from '../context/VaultContext'
+import { createVaultItem } from '../vault/vaultService'
 import styles from './AddPasswordForm.module.css'
 
 interface FormState {
-  service: string
+  title: string
   username: string
+  websiteUrl: string
   password: string
+  notes: string
 }
 
-export default function AddPasswordForm() {
-  const [form, setForm] = useState<FormState>({ service: '', username: '', password: '' })
-  const [showPw, setShowPw] = useState(false)
+const EMPTY: FormState = { title: '', username: '', websiteUrl: '', password: '', notes: '' }
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+export default function AddPasswordForm() {
+  const { encryptPw, bumpVaultVersion } = useVault()
+  const [form, setForm] = useState<FormState>(EMPTY)
+  const [showPw, setShowPw] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    // TODO: call backend to persist encrypted password
-    console.log('Saving password:', form)
-    alert(`Password for ${form.service} saved successfully!`)
-    setForm({ service: '', username: '', password: '' })
+    setError(null)
+    setSuccess(false)
+    setLoading(true)
+
+    try {
+      // Encrypt password client-side before sending to server
+      const { passwordEncrypted, encryptionIv, encryptionAlgo } = await encryptPw(form.password)
+
+      await createVaultItem({
+        title: form.title,
+        username: form.username || undefined,
+        websiteUrl: form.websiteUrl || undefined,
+        passwordEncrypted,
+        encryptionIv,
+        encryptionAlgo,
+      })
+
+      setForm(EMPTY)
+      setSuccess(true)
+      bumpVaultVersion()
+      setTimeout(() => setSuccess(false), 3000)
+    } catch (err) {
+      setError((err as Error).message || 'Failed to save password')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -36,13 +68,13 @@ export default function AddPasswordForm() {
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.field}>
-          <label htmlFor="service" className={styles.label}>Service</label>
+          <label htmlFor="title" className={styles.label}>Title <span className={styles.required}>*</span></label>
           <input
-            id="service"
-            name="service"
+            id="title"
+            name="title"
             type="text"
             className={styles.input}
-            value={form.service}
+            value={form.title}
             onChange={handleChange}
             placeholder="e.g. Gmail, GitHub, Netflix"
             required
@@ -59,12 +91,24 @@ export default function AddPasswordForm() {
             value={form.username}
             onChange={handleChange}
             placeholder="username or email"
-            required
           />
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="password" className={styles.label}>Password</label>
+          <label htmlFor="websiteUrl" className={styles.label}>Website URL</label>
+          <input
+            id="websiteUrl"
+            name="websiteUrl"
+            type="url"
+            className={styles.input}
+            value={form.websiteUrl}
+            onChange={handleChange}
+            placeholder="https://example.com"
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label htmlFor="password" className={styles.label}>Password <span className={styles.required}>*</span></label>
           <div className={styles.passwordWrap}>
             <input
               id="password"
@@ -74,6 +118,7 @@ export default function AddPasswordForm() {
               value={form.password}
               onChange={handleChange}
               placeholder="Enter password"
+              autoComplete="new-password"
               required
             />
             <button
@@ -98,13 +143,38 @@ export default function AddPasswordForm() {
           </div>
         </div>
 
-        <button type="submit" className={styles.submitBtn}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="16" />
-            <line x1="8" y1="12" x2="16" y2="12" />
-          </svg>
-          Add Password
+        {error && (
+          <div className={styles.errorBox}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className={styles.successBox}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Password saved and encrypted successfully!
+          </div>
+        )}
+
+        <button type="submit" className={styles.submitBtn} disabled={loading}>
+          {loading ? (
+            <>
+              <span className={styles.spinner} />
+              Encrypting &amp; Saving…
+            </>
+          ) : (
+            <>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              Save Encrypted Password
+            </>
+          )}
         </button>
       </form>
     </section>

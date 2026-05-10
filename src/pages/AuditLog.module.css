@@ -1,0 +1,258 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem 1.5rem;
+}
+
+.wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ── Page header ── */
+.pageHeader {
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pageTitleIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--accent-muted);
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.sub {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0.2rem 0 0;
+}
+
+/* ── Filters ── */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.filterChip {
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filterChip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filterChipActive {
+  background: var(--accent-muted);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Loading ── */
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem;
+  color: var(--text-secondary);
+  justify-content: center;
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Error ── */
+.errorBox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  background: var(--danger-muted);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  color: var(--danger);
+  font-size: 0.875rem;
+}
+
+/* ── Empty ── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 1rem;
+  text-align: center;
+  color: var(--text-tertiary);
+}
+
+.emptyIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: var(--hover);
+  color: var(--text-tertiary);
+  margin-bottom: 1.25rem;
+}
+
+.empty p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 0.35rem;
+}
+
+.empty span {
+  font-size: 0.85rem;
+}
+
+/* ── Table ── */
+.logTable {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1.8fr 0.7fr 0.7fr 1fr 1.2fr;
+  padding: 0.7rem 1.25rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  gap: 0.5rem;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1.8fr 0.7fr 0.7fr 1fr 1.2fr;
+  padding: 0.8rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.15s;
+  font-size: 0.875rem;
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.tableRow:hover {
+  background: var(--hover);
+}
+
+/* ── Action badges ── */
+.actionBadge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.badge_success  { background: var(--success-muted); color: var(--success); }
+.badge_info     { background: var(--accent-muted);  color: var(--accent);  }
+.badge_warning  { background: var(--warning-muted); color: var(--warning); }
+.badge_danger   { background: var(--danger-muted);  color: var(--danger);  }
+.badge_accent   { background: var(--accent-muted);  color: var(--accent);  }
+
+/* ── Status badge ── */
+.statusBadge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.statusSuccess {
+  background: var(--success-muted);
+  color: var(--success);
+}
+
+.statusFail {
+  background: var(--danger-muted);
+  color: var(--danger);
+}
+
+.itemId {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.ip {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+
+.timestamp {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 700px) {
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 1fr 0.6fr 1fr;
+  }
+
+  .tableHeader span:nth-child(2),
+  .tableHeader span:nth-child(4),
+  .tableRow span:nth-child(2),
+  .tableRow span:nth-child(4) {
+    display: none;
+  }
+}

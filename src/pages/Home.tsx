@@ -1,12 +1,18 @@
 import { useAuth } from '../context/AuthContext'
+import { useVault } from '../context/VaultContext'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import PasswordList from '../components/PasswordList'
 import AddPasswordForm from '../components/AddPasswordForm'
+import MasterPasswordSetup from '../components/MasterPasswordSetup'
 import styles from './Home.module.css'
 
 export default function Home() {
   const { session, isGuest, handleLogin } = useAuth()
+  const { lockState } = useVault()
+
+  // Show unlock/setup overlay when authenticated but vault is locked
+  const showVaultGate = !isGuest && (lockState === 'locked' || lockState === 'no-settings')
 
   return (
     <div className={styles.page}>
@@ -21,7 +27,9 @@ export default function Home() {
             <p className={styles.heroSub}>
               {isGuest
                 ? 'Securely store and manage all your passwords in one place'
-                : 'Securely manage all your passwords in one place'}
+                : lockState === 'unlocked'
+                  ? 'Your vault is unlocked — manage your passwords below'
+                  : 'Securely manage all your passwords in one place'}
             </p>
             {isGuest && (
               <button className={styles.heroCta} onClick={handleLogin}>
@@ -30,11 +38,24 @@ export default function Home() {
             )}
           </section>
 
-          {/* ── Content ── */}
-          {!isGuest && (
+          {/* ── Vault gate overlay (setup / unlock) ── */}
+          {showVaultGate && (
+            <MasterPasswordSetup mode={lockState === 'no-settings' ? 'setup' : 'unlock'} />
+          )}
+
+          {/* ── Vault content ── */}
+          {!isGuest && lockState === 'unlocked' && (
             <div className={styles.content}>
               <PasswordList />
               <AddPasswordForm />
+            </div>
+          )}
+
+          {/* ── Checking state ── */}
+          {!isGuest && lockState === 'checking' && (
+            <div className={styles.checking}>
+              <span className={styles.checkingSpinner} />
+              <span>Checking vault…</span>
             </div>
           )}
 
@@ -49,7 +70,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3>End-to-End Encryption</h3>
-                <p>Your passwords are encrypted before they leave your device</p>
+                <p>Your passwords are encrypted with AES-256-GCM before they leave your device</p>
               </div>
               <div className={styles.featureCard}>
                 <div className={styles.featureIcon}>
@@ -58,18 +79,28 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3>Zero-Knowledge Architecture</h3>
-                <p>We never see your master password or your data</p>
+                <p>Keys derived with Argon2id — we never see your master password or plaintext</p>
               </div>
               <div className={styles.featureCard}>
                 <div className={styles.featureIcon}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" />
-                    <line x1="8" y1="21" x2="16" y2="21" />
-                    <line x1="12" y1="17" x2="12" y2="21" />
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
                   </svg>
                 </div>
-                <h3>Cross-Platform Access</h3>
-                <p>Access your vault from any device, anywhere</p>
+                <h3>Full Audit Trail</h3>
+                <p>Every access logged — know exactly when and where your vault was accessed</p>
+              </div>
+              <div className={styles.featureCard}>
+                <div className={styles.featureIcon}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                  </svg>
+                </div>
+                <h3>Password History</h3>
+                <p>Keep up to 20 versions per entry — roll back whenever you need</p>
               </div>
             </section>
           )}

@@ -84,7 +84,9 @@ export async function authFetch<T = unknown>(
 
   if (!res.ok) {
     const text = await res.text().catch(() => '')
-    throw new Error(`Request failed: ${res.status} ${url} — ${text}`)
+    const err = new Error(`Request failed: ${res.status} ${url} — ${text}`) as Error & { status: number }
+    err.status = res.status
+    throw err
   }
 
   return parseResponse<T>(res)
