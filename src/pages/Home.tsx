@@ -59,6 +59,13 @@ export default function Home() {
             </div>
           )}
 
+          {/* ── Error state (e.g. transient 502 from server) ── */}
+          {!isGuest && lockState === 'error' && (
+            <div className={styles.checking}>
+              <span>Could not reach the vault. Please refresh the page and try again.</span>
+            </div>
+          )}
+
           {/* ── Guest feature cards ── */}
           {isGuest && (
             <section className={styles.features}>

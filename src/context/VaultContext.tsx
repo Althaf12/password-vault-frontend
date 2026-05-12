@@ -7,6 +7,7 @@ import {
   useRef,
   type ReactNode,
 } from 'react'
+import { useAuth } from './AuthContext'
 import { getCryptoSettings, saveCryptoSettings } from '../vault/vaultService'
 import {
   deriveKey,
@@ -57,6 +58,7 @@ const DEFAULT_KDF = {
 const VaultContext = createContext<VaultContextValue | undefined>(undefined)
 
 export function VaultProvider({ children }: { children: ReactNode }) {
+  const { isAuthChecked, isGuest } = useAuth()
   const [lockState, setLockState] = useState<VaultLockState>('checking')
   const [cryptoSettings, setCryptoSettings] = useState<CryptoSettingsResponse | null>(null)
   const [vaultVersion, setVaultVersion] = useState(0)
@@ -64,8 +66,14 @@ export function VaultProvider({ children }: { children: ReactNode }) {
   // Keep derived key in a ref — not reactive state — so it never leaks into logs/devtools
   const derivedKeyRef = useRef<CryptoKey | null>(null)
 
-  // ── On mount: check if KDF settings exist ──────────────────────────
+  // ── Once auth is confirmed, check if KDF settings exist ────────────
+  // Wait for isAuthChecked to be true so auth cookies are established
+  // before making the API call. Prevents a race-condition 502 in production
+  // where the vault request fires before the session is validated.
   useEffect(() => {
+    if (!isAuthChecked) return          // Auth check still in flight
+    if (isGuest) return                 // No vault for unauthenticated users
+
     let cancelled = false
     ;(async () => {
       try {
@@ -78,11 +86,13 @@ export function VaultProvider({ children }: { children: ReactNode }) {
           setLockState('no-settings')
         }
       } catch {
-        if (!cancelled) setLockState('no-settings')
+        // Do not conflate a server/network error with "no settings exist".
+        // 'error' lets the UI show a retry prompt instead of the setup form.
+        if (!cancelled) setLockState('error')
       }
     })()
     return () => { cancelled = true }
-  }, [])
+  }, [isAuthChecked, isGuest])
 
   // ── Setup master password (first-time) ─────────────────────────────
   const setupMasterPassword = useCallback(async (masterPassword: string): Promise<string | null> => {

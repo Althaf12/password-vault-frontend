@@ -138,4 +138,4 @@ export interface ApiError {
 
 // ── Vault Context state ──────────────────────────────────────────────
 
-export type VaultLockState = 'checking' | 'no-settings' | 'locked' | 'unlocked'
+export type VaultLockState = 'checking' | 'no-settings' | 'locked' | 'unlocked' | 'error'
