@@ -1,7 +1,6 @@
 .page {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 .main {
@@ -157,11 +156,12 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
 .tableHeader {
   display: grid;
-  grid-template-columns: 1.8fr 0.7fr 0.7fr 1fr 1.2fr;
+  grid-template-columns: minmax(140px, 2fr) minmax(70px, 0.6fr) minmax(90px, 0.8fr) minmax(160px, 1.8fr) minmax(150px, 1.4fr);
   padding: 0.7rem 1.25rem;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -170,18 +170,27 @@
   color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  gap: 0.5rem;
+  gap: 1rem;
+  align-items: center;
 }
 
 .tableRow {
   display: grid;
-  grid-template-columns: 1.8fr 0.7fr 0.7fr 1fr 1.2fr;
+  grid-template-columns: minmax(140px, 2fr) minmax(70px, 0.6fr) minmax(90px, 0.8fr) minmax(160px, 1.8fr) minmax(150px, 1.4fr);
   padding: 0.8rem 1.25rem;
   border-bottom: 1px solid var(--border);
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   transition: background 0.15s;
   font-size: 0.875rem;
+}
+
+.tableHeader > *,
+.tableRow > * {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tableRow:last-child {

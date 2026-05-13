@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
 import { listTrash, restoreFromTrash, permanentlyDelete } from '../vault/vaultService'
 import type { TrashItemResponse } from '../vault/types'
 import styles from './Trash.module.css'
@@ -52,9 +50,7 @@ export default function Trash() {
   }
 
   return (
-    <div className={styles.page}>
-      <Header />
-      <main className={styles.main}>
+    <main className={styles.main}>
         <div className={styles.wrapper}>
           <div className={styles.pageHeader}>
             <div className={styles.pageTitle}>
@@ -163,8 +159,6 @@ export default function Trash() {
             </div>
           )}
         </div>
-      </main>
-      <Footer />
-    </div>
+    </main>
   )
 }

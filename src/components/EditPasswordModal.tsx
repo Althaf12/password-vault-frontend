@@ -6,15 +6,16 @@ import styles from './EditPasswordModal.module.css'
 
 interface Props {
   item: VaultItemResponse
+  initialTab?: ActiveTab
   onClose: () => void
   onSaved: () => void
 }
 
 type ActiveTab = 'edit' | 'history'
 
-export default function EditPasswordModal({ item, onClose, onSaved }: Props) {
+export default function EditPasswordModal({ item, initialTab, onClose, onSaved }: Props) {
   const { encryptPw, decryptPw } = useVault()
-  const [tab, setTab] = useState<ActiveTab>('edit')
+  const [tab, setTab] = useState<ActiveTab>(initialTab ?? 'edit')
 
   // ── Edit state ────────────────────────────────────────────────────
   const [title, setTitle] = useState(item.title)

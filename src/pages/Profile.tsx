@@ -1,16 +1,25 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import { useVault } from '../context/VaultContext'
+import { listVaultItems } from '../vault/vaultService'
 import styles from './Profile.module.css'
 
 export default function Profile() {
   const { session, handleLogout } = useAuth()
+  const { lockState } = useVault()
+  const [passwordCount, setPasswordCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (lockState === 'unlocked') {
+      listVaultItems()
+        .then((items) => setPasswordCount(items.length))
+        .catch(() => {})
+    }
+  }, [lockState])
 
   return (
-    <div className={styles.page}>
-      <Header />
-      <main className={styles.main}>
+    <main className={styles.main}>
         <div className={styles.wrapper}>
           <div className={styles.card}>
             {/* ── Avatar section ── */}
@@ -52,10 +61,6 @@ export default function Profile() {
                     <span className={styles.infoLabel}>Email</span>
                     <span className={styles.infoValue}>{session?.email || '—'}</span>
                   </div>
-                  <div className={styles.infoItem}>
-                    <span className={styles.infoLabel}>User ID</span>
-                    <span className={styles.infoValue}>{session?.userId || '—'}</span>
-                  </div>
                 </div>
               </section>
 
@@ -96,7 +101,9 @@ export default function Profile() {
                 <div className={styles.infoGrid}>
                   <div className={styles.infoItem}>
                     <span className={styles.infoLabel}>Total Passwords</span>
-                    <span className={styles.infoValue}>3</span>
+                    <span className={styles.infoValue}>
+                      {passwordCount !== null ? passwordCount : lockState !== 'unlocked' ? 'Vault locked' : '…'}
+                    </span>
                   </div>
                   <div className={styles.infoItem}>
                     <span className={styles.infoLabel}>Last Updated</span>
@@ -127,7 +134,4 @@ export default function Profile() {
           </div>
         </div>
       </main>
-      <Footer />
-    </div>
-  )
-}
+

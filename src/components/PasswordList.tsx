@@ -5,19 +5,29 @@ import type { VaultItemResponse } from '../vault/types'
 import EditPasswordModal from './EditPasswordModal'
 import styles from './PasswordList.module.css'
 
+type ViewMode = 'grid' | 'list'
+type EditState = { item: VaultItemResponse; tab: 'edit' | 'history' } | null
+
 export default function PasswordList() {
   const { vaultVersion, decryptPw, bumpVaultVersion } = useVault()
   const [items, setItems] = useState<VaultItemResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    try { return (localStorage.getItem('vault-view') as ViewMode) || 'grid' } catch { return 'grid' }
+  })
 
-  const [editingItem, setEditingItem] = useState<VaultItemResponse | null>(null)
+  const [editState, setEditState] = useState<EditState>(null)
 
   // revealed[vaultItemId] = decrypted plaintext or null while loading
   const [revealed, setRevealed] = useState<Record<number, string | null>>({})
   const [revealLoading, setRevealLoading] = useState<Record<number, boolean>>({})
   const [copied, setCopied] = useState<Record<number, boolean>>({})
 
+  const switchView = (mode: ViewMode) => {
+    setViewMode(mode)
+    try { localStorage.setItem('vault-view', mode) } catch {}
+  }
   const fetchItems = useCallback(async () => {
     setLoading(true)
     setError(null)
@@ -132,9 +142,33 @@ export default function PasswordList() {
           Saved Passwords
         </h2>
         <span className={styles.count}>{items.length}</span>
+        <div className={styles.viewToggle}>
+          <button
+            className={`${styles.viewBtn} ${viewMode === 'grid' ? styles.viewBtnActive : ''}`}
+            onClick={() => switchView('grid')}
+            title="Grid view"
+            aria-label="Grid view"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+          </button>
+          <button
+            className={`${styles.viewBtn} ${viewMode === 'list' ? styles.viewBtnActive : ''}`}
+            onClick={() => switchView('list')}
+            title="List view"
+            aria-label="List view"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      <div className={styles.grid}>
+      <div className={`${styles.grid} ${viewMode === 'list' ? styles.listView : ''}`}>
         {items.map((item, idx) => {
           const iconColor = ICON_COLORS[idx % ICON_COLORS.length]
           const isRevealed = revealed[item.vaultItemId] !== undefined
@@ -154,7 +188,7 @@ export default function PasswordList() {
                 <div className={styles.cardActions}>
                   <button
                     className={styles.editBtn}
-                    onClick={() => setEditingItem(item)}
+                    onClick={() => setEditState({ item, tab: 'edit' })}
                     title="Edit"
                     aria-label={`Edit ${item.title}`}
                   >
@@ -241,7 +275,17 @@ export default function PasswordList() {
               </div>
 
               <div className={styles.cardMeta}>
-                <span className={styles.versionBadge}>v{item.currentVersion}</span>
+                <button
+                  className={styles.versionHistoryBtn}
+                  onClick={() => setEditState({ item, tab: 'history' })}
+                  title="View version history"
+                  aria-label="View version history"
+                >
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <span className={styles.versionBadge}>v{item.currentVersion}</span>
+                </button>
                 <span className={styles.metaDate}>
                   {new Date(item.updatedAt).toLocaleDateString()}
                 </span>
@@ -251,13 +295,14 @@ export default function PasswordList() {
         })}
       </div>
 
-      {editingItem && (
+      {editState && (
         <EditPasswordModal
-          item={editingItem}
-          onClose={() => setEditingItem(null)}
+          item={editState.item}
+          initialTab={editState.tab}
+          onClose={() => setEditState(null)}
           onSaved={() => {
             bumpVaultVersion()
-            setEditingItem(null)
+            setEditState(null)
           }}
         />
       )}

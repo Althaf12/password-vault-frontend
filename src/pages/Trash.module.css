@@ -1,7 +1,6 @@
 .page {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 .main {
@@ -146,7 +145,8 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1rem 1.25rem;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 .card:hover {

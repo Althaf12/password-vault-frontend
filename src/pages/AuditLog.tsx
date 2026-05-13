@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
 import { getAuditLogs } from '../vault/vaultService'
 import type { AuditLogResponse, AuditActionType } from '../vault/types'
 import styles from './AuditLog.module.css'
@@ -41,9 +39,7 @@ export default function AuditLog() {
   const actionTypes: string[] = ['ALL', 'CREATE', 'VIEW', 'VIEW_PASSWORD', 'UPDATE', 'ADD_VERSION', 'DELETE', 'RESTORE', 'PERMANENT_DELETE']
 
   return (
-    <div className={styles.page}>
-      <Header />
-      <main className={styles.main}>
+    <main className={styles.main}>
         <div className={styles.wrapper}>
           <div className={styles.pageHeader}>
             <div className={styles.pageTitle}>
@@ -139,8 +135,6 @@ export default function AuditLog() {
             </div>
           )}
         </div>
-      </main>
-      <Footer />
-    </div>
+    </main>
   )
 }

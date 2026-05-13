@@ -34,12 +34,27 @@
 
 .logo {
   color: var(--accent);
+  flex-shrink: 0;
+}
+
+.brandBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .brandText {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.brandSub {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  letter-spacing: 0.01em;
 }
 
 /* ── Nav ── */
@@ -120,7 +135,7 @@
 .profileGroup {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  position: relative;
 }
 
 .avatarBtn {
@@ -133,11 +148,14 @@
   overflow: hidden;
   border: 2px solid var(--border);
   color: var(--text-secondary);
-  text-decoration: none;
+  background: var(--surface);
+  cursor: pointer;
   transition: border-color 0.15s;
+  padding: 0;
 }
 
-.avatarBtn:hover {
+.avatarBtn:hover,
+.avatarBtnOpen {
   border-color: var(--accent);
 }
 
@@ -147,25 +165,82 @@
   object-fit: cover;
 }
 
-.logoutBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
+/* ── Dropdown ── */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 200px;
+  background: var(--card);
   border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  padding: 0;
-  transition: background 0.15s, color 0.15s;
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  z-index: 200;
+  overflow: hidden;
 }
 
-.logoutBtn:hover {
+.dropdownUser {
+  padding: 0.85rem 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.dropdownName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dropdownEmail {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: var(--border);
+  margin: 0;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background: var(--hover);
+  color: var(--text-primary);
+}
+
+.dropdownItemActive {
+  background: var(--accent-muted);
+  color: var(--accent);
+}
+
+.dropdownItemDanger {
+  color: var(--danger);
+}
+
+.dropdownItemDanger:hover {
   background: var(--danger-muted);
   color: var(--danger);
-  border-color: var(--danger);
 }
 
 /* Lock vault button */

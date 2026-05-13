@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { VaultProvider } from './context/VaultContext'
+import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import Profile from './pages/Profile'
@@ -13,33 +14,35 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <VaultProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/trash"
-              element={
-                <ProtectedRoute>
-                  <Trash />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/audit"
-              element={
-                <ProtectedRoute>
-                  <AuditLog />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/trash"
+                element={
+                  <ProtectedRoute>
+                    <Trash />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/audit"
+                element={
+                  <ProtectedRoute>
+                    <AuditLog />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Layout>
         </VaultProvider>
       </AuthProvider>
     </ThemeProvider>

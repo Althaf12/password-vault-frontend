@@ -1,7 +1,5 @@
 import { useAuth } from '../context/AuthContext'
 import { useVault } from '../context/VaultContext'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
 import PasswordList from '../components/PasswordList'
 import AddPasswordForm from '../components/AddPasswordForm'
 import MasterPasswordSetup from '../components/MasterPasswordSetup'
@@ -15,10 +13,8 @@ export default function Home() {
   const showVaultGate = !isGuest && (lockState === 'locked' || lockState === 'no-settings')
 
   return (
-    <div className={styles.page}>
-      <Header />
-      <main className={styles.main}>
-        <div className={styles.wrapper}>
+    <main className={styles.main}>
+      <div className={styles.wrapper}>
           {/* ── Hero ── */}
           <section className={styles.hero}>
             <h1 className={styles.heroTitle}>
@@ -111,9 +107,7 @@ export default function Home() {
               </div>
             </section>
           )}
-        </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </main>
   )
 }
