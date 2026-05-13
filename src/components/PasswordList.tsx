@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useVault } from '../context/VaultContext'
 import { listVaultItems, deleteVaultItem, getVersion } from '../vault/vaultService'
 import type { VaultItemResponse } from '../vault/types'
+import EditPasswordModal from './EditPasswordModal'
 import styles from './PasswordList.module.css'
 
 export default function PasswordList() {
@@ -9,6 +10,8 @@ export default function PasswordList() {
   const [items, setItems] = useState<VaultItemResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  const [editingItem, setEditingItem] = useState<VaultItemResponse | null>(null)
 
   // revealed[vaultItemId] = decrypted plaintext or null while loading
   const [revealed, setRevealed] = useState<Record<number, string | null>>({})
@@ -150,6 +153,17 @@ export default function PasswordList() {
                 </div>
                 <div className={styles.cardActions}>
                   <button
+                    className={styles.editBtn}
+                    onClick={() => setEditingItem(item)}
+                    title="Edit"
+                    aria-label={`Edit ${item.title}`}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                  </button>
+                  <button
                     className={styles.copyBtn}
                     onClick={() => copyPassword(item)}
                     title={isCopied ? 'Copied!' : 'Copy password'}
@@ -236,6 +250,17 @@ export default function PasswordList() {
           )
         })}
       </div>
+
+      {editingItem && (
+        <EditPasswordModal
+          item={editingItem}
+          onClose={() => setEditingItem(null)}
+          onSaved={() => {
+            bumpVaultVersion()
+            setEditingItem(null)
+          }}
+        />
+      )}
     </section>
   )
 }
