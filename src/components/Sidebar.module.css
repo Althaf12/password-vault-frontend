@@ -99,3 +99,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ── Mobile: auto-collapse sidebar to icon-only ── */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 54px;
+  }
+
+  .sectionLabel,
+  .navLabel {
+    display: none;
+  }
+}

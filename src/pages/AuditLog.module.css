@@ -253,15 +253,13 @@
 }
 
 @media (max-width: 700px) {
-  .tableHeader,
-  .tableRow {
-    grid-template-columns: 1fr 0.6fr 1fr;
+  .logTable {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .tableHeader span:nth-child(2),
-  .tableHeader span:nth-child(4),
-  .tableRow span:nth-child(2),
-  .tableRow span:nth-child(4) {
-    display: none;
+  .tableHeader,
+  .tableRow {
+    min-width: 580px;
   }
 }
