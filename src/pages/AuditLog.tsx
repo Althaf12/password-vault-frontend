@@ -103,6 +103,7 @@ export default function AuditLog() {
 
           {!loading && !error && filtered.length > 0 && (
             <div className={styles.logTable}>
+              <div className={styles.tableScroll}>
               <div className={styles.tableHeader}>
                 <span>Action</span>
                 <span>Item ID</span>
@@ -132,6 +133,8 @@ export default function AuditLog() {
                   </div>
                 )
               })}
+            </div>
+              </div>
             </div>
           )}
         </div>

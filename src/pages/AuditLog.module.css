@@ -252,8 +252,12 @@
   color: var(--text-tertiary);
 }
 
+.tableScroll {
+  /* transparent scroll wrapper — keeps logTable's border-radius/bg intact */
+}
+
 @media (max-width: 700px) {
-  .logTable {
+  .tableScroll {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
