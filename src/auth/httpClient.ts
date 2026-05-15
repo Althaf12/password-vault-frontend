@@ -71,14 +71,24 @@ export async function authFetch<T = unknown>(
     const refreshed = await refreshAuth()
     isRefreshing = false
 
-    processQueue(refreshed)
-
     if (refreshed) {
+      processQueue(true)
       // Retry original request
       res = await fetch(url, init)
     } else {
-      redirectToLogin()
-      throw new Error('Session expired')
+      // Refresh failed — likely a cross-tab token rotation collision: another browser
+      // tab called /refresh first so the old token is already revoked. Retry the
+      // original request once with the current cookies (written by the other tab)
+      // before giving up and redirecting to login.
+      const retryRes = await fetch(url, init)
+      if (retryRes.status !== 401) {
+        processQueue(true)
+        res = retryRes
+      } else {
+        processQueue(false)
+        redirectToLogin()
+        throw new Error('Session expired')
+      }
     }
   }
 
