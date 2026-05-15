@@ -104,36 +104,35 @@ export default function AuditLog() {
           {!loading && !error && filtered.length > 0 && (
             <div className={styles.logTable}>
               <div className={styles.tableScroll}>
-              <div className={styles.tableHeader}>
-                <span>Action</span>
-                <span>Item ID</span>
-                <span>Status</span>
-                <span>IP Address</span>
-                <span>Timestamp</span>
-              </div>
-              {filtered.map((log) => {
-                const meta = ACTION_LABELS[log.actionType] ?? { label: log.actionType, color: 'info' }
-                return (
-                  <div key={log.auditId} className={styles.tableRow}>
-                    <span>
-                      <span className={`${styles.actionBadge} ${styles[`badge_${meta.color}`]}`}>
-                        {meta.label}
+                <div className={styles.tableHeader}>
+                  <span>Action</span>
+                  <span>Item ID</span>
+                  <span>Status</span>
+                  <span>IP Address</span>
+                  <span>Timestamp</span>
+                </div>
+                {filtered.map((log) => {
+                  const meta = ACTION_LABELS[log.actionType] ?? { label: log.actionType, color: 'info' }
+                  return (
+                    <div key={log.auditId} className={styles.tableRow}>
+                      <span>
+                        <span className={`${styles.actionBadge} ${styles['badge_' + meta.color]}`}>
+                          {meta.label}
+                        </span>
                       </span>
-                    </span>
-                    <span className={styles.itemId}>#{log.vaultItemId}</span>
-                    <span>
-                      <span className={`${styles.statusBadge} ${log.status === 'SUCCESS' ? styles.statusSuccess : styles.statusFail}`}>
-                        {log.status}
+                      <span className={styles.itemId}>#{log.vaultItemId}</span>
+                      <span>
+                        <span className={`${styles.statusBadge} ${log.status === 'SUCCESS' ? styles.statusSuccess : styles.statusFail}`}>
+                          {log.status}
+                        </span>
                       </span>
-                    </span>
-                    <span className={styles.ip}>{log.ipAddress}</span>
-                    <span className={styles.timestamp}>
-                      {new Date(log.actionTimestamp).toLocaleString()}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
+                      <span className={styles.ip}>{log.ipAddress}</span>
+                      <span className={styles.timestamp}>
+                        {new Date(log.actionTimestamp).toLocaleString()}
+                      </span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )}
