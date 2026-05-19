@@ -243,7 +243,7 @@ export default function PasswordList() {
                 </a>
               )}
 
-              <div className={styles.passwordRow}>
+              <div className={`${styles.passwordRow} ${isRevealed ? styles.passwordRowRevealed : ''}`}>
                 <code className={styles.passwordText}>
                   {isRevLoading ? '…' : isRevealed ? (revealed[item.vaultItemId] ?? '') : '••••••••••••'}
                 </code>
