@@ -264,7 +264,35 @@
   color: #fff;
 }
 
+/* ── Mobile menu button (burger) — hidden on desktop ── */
+.mobileMenuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.mobileMenuBtn:hover {
+  background: var(--hover);
+  color: var(--text-primary);
+}
+
 /* ── Responsive ── */
+@media (max-width: 768px) {
+  .mobileMenuBtn {
+    display: flex;
+  }
+}
+
 @media (max-width: 600px) {
   .inner {
     padding: 0 0.75rem;

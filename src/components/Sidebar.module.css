@@ -100,14 +100,38 @@
   text-overflow: ellipsis;
 }
 
-/* ── Mobile: auto-collapse sidebar to icon-only ── */
+/* ── Mobile: hide sidebar completely, show as overlay when open ── */
 @media (max-width: 768px) {
   .sidebar {
-    width: 54px;
+    position: fixed;
+    left: 0;
+    top: 60px;
+    height: calc(100vh - 60px);
+    width: 220px;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    z-index: 200;
+    box-shadow: none;
   }
 
+  .sidebar.mobileOpen {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.45);
+  }
+
+  /* Override collapsed — on mobile the sidebar is either fully shown or hidden */
+  .sidebar.collapsed {
+    width: 220px;
+  }
+
+  /* Hide the desktop toggle button on mobile */
+  .toggleBtn {
+    display: none;
+  }
+
+  /* Always show section label and nav labels when sidebar is open on mobile */
   .sectionLabel,
   .navLabel {
-    display: none;
+    display: block;
   }
 }

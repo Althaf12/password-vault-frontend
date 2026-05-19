@@ -440,7 +440,6 @@ export default function EditPasswordModal({ item, initialTab, onClose, onSaved }
                           {new Date(v.createdAt).toLocaleString()}
                         </span>
                       </div>
-                      <div className={styles.versionAlgo}>{v.encryptionAlgo}</div>
                       {isRevealed && (
                         <code className={styles.versionPasswordText}>
                           {revealedVersions[v.versionNumber]}

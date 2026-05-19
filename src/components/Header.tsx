@@ -5,7 +5,11 @@ import { useTheme } from '../context/ThemeContext'
 import { useVault } from '../context/VaultContext'
 import styles from './Header.module.css'
 
-export default function Header() {
+interface HeaderProps {
+  onMobileMenuToggle?: () => void
+}
+
+export default function Header({ onMobileMenuToggle }: HeaderProps) {
   const { session, isGuest, handleLogin, handleLogout } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const { lockState, lock } = useVault()
@@ -30,6 +34,21 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
+        {/* ── Mobile menu burger (visible on mobile only) ── */}
+        {!isGuest && (
+          <button
+            className={styles.mobileMenuBtn}
+            onClick={onMobileMenuToggle}
+            aria-label="Toggle navigation menu"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+        )}
+
         {/* ── Logo / Brand ── */}
         <Link to="/" className={styles.brand}>
           <svg className={styles.logo} width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

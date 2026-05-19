@@ -3,7 +3,12 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import styles from './Sidebar.module.css'
 
-export default function Sidebar() {
+interface SidebarProps {
+  mobileOpen?: boolean
+  onMobileClose?: () => void
+}
+
+export default function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
   const { isGuest } = useAuth()
   const location = useLocation()
   const [collapsed, setCollapsed] = useState(() => {
@@ -55,8 +60,8 @@ export default function Sidebar() {
   ]
 
   return (
-    <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
-      {/* ── Toggle button ── */}
+    <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''} ${mobileOpen ? styles.mobileOpen : ''}`}>
+      {/* ── Toggle button (desktop only) ── */}
       <button
         className={styles.toggleBtn}
         onClick={() => setCollapsed((c) => !c)}
@@ -70,7 +75,7 @@ export default function Sidebar() {
       </button>
 
       {/* ── Section label ── */}
-      {!collapsed && <span className={styles.sectionLabel}>User Operations</span>}
+      {(!collapsed || mobileOpen) && <span className={styles.sectionLabel}>User Operations</span>}
 
       {/* ── Nav items ── */}
       <nav className={styles.nav}>
@@ -84,10 +89,11 @@ export default function Sidebar() {
               key={item.path}
               to={item.path}
               className={`${styles.navItem} ${isActive ? styles.active : ''}`}
-              title={collapsed ? item.label : undefined}
+              title={collapsed && !mobileOpen ? item.label : undefined}
+              onClick={onMobileClose}
             >
               <span className={styles.navIcon}>{item.icon}</span>
-              {!collapsed && <span className={styles.navLabel}>{item.label}</span>}
+              {(!collapsed || mobileOpen) && <span className={styles.navLabel}>{item.label}</span>}
             </Link>
           )
         })}
